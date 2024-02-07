@@ -1,0 +1,16 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+datasource:
+  username: ${DATABASE_USERNAME}
+  password: ${DATABASE_PASSWORD}
+  driver-class-name: org.mariadb.jdbc.Driver
+  url: jdbc:mariadb://database-2.c4lmd1bsphpd.ap-northeast-2.rds.amazonaws.com/shopping_mall
+
+  jpa:
+    show-sql: true
+
+jwtpassword:
+  source: ${JWT_SECRET_KEY}
