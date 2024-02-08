@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/buy")
-public class BuyController {
+public class BuyController implements ApiController{
 }

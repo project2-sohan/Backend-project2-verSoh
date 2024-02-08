@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/sell")
-public class SellController implements ApiController{
+@RequestMapping(value="/exceptions")
+public class ExceptionController {
 }
