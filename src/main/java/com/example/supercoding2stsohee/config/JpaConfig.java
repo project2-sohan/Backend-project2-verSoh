@@ -32,7 +32,7 @@ import java.util.Map;
                 "com.example.supercoding2stsohee.repository.review",
                 "com.example.supercoding2stsohee.repository.roles",
                 "com.example.supercoding2stsohee.repository.userRoles",
-                "com.example.supercoding2stsohee.repository.users"
+                "com.example.supercoding2stsohee.repository.user"
         },
         entityManagerFactoryRef = "localContainerEntityManagerFactoryBean",
         transactionManagerRef = "tm"
@@ -64,7 +64,7 @@ public class JpaConfig {
                 "com.example.supercoding2stsohee.repository.review",
                 "com.example.supercoding2stsohee.repository.roles",
                 "com.example.supercoding2stsohee.repository.userRoles",
-                "com.example.supercoding2stsohee.repository.users"
+                "com.example.supercoding2stsohee.repository.user"
         );
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         lemfb.setJpaVendorAdapter(vendorAdapter);

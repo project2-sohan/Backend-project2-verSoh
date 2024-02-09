@@ -1,16 +1,12 @@
 package com.example.supercoding2stsohee.repository.roles;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(of = "roleId")
 @Table(name = "roles")
 public class Roles {
 

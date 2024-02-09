@@ -1,6 +1,6 @@
 package com.example.supercoding2stsohee.repository.orderTable;
 
-import com.example.supercoding2stsohee.repository.users.User;
+import com.example.supercoding2stsohee.repository.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
