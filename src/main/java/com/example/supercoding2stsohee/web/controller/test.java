@@ -9,10 +9,12 @@ import com.example.supercoding2stsohee.repository.productOption.ProductOptionJpa
 import com.example.supercoding2stsohee.repository.productPhoto.ProductPhotoJpa;
 import com.example.supercoding2stsohee.repository.review.ReviewJpa;
 import com.example.supercoding2stsohee.repository.roles.RolesJpa;
+import com.example.supercoding2stsohee.repository.userDetails.CustomUserDetails;
 import com.example.supercoding2stsohee.repository.userRoles.UserRolesJpa;
 import com.example.supercoding2stsohee.repository.user.User;
 import com.example.supercoding2stsohee.repository.user.UserJpa;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
@@ -39,5 +41,10 @@ public class test {
         Integer userId = user.getUserId();
 
         return "test success: " + userId;
+    }
+
+    @GetMapping("/test2")
+    public String test2(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        return "test success, userId: " + customUserDetails.getUserId();
     }
 }

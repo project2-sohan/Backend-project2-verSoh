@@ -11,7 +11,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SignUpRequest {
     private String name;
+    private String phoneNumber;
     private String nickName;
     private String email;
     private String password;
+    private String profileImg;
+    private String address;
+    private String gender;
+
 }

@@ -10,6 +10,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "userId")
 @Table(name = "user")
 public class User {
@@ -35,7 +38,7 @@ public class User {
     private String password;
 
     @Column(name = "profile_img", nullable = false)
-    private String profile_img;
+    private String profileImg;
 
     @Column(name = "address", nullable = false)
     private String address;
