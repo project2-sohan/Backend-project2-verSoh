@@ -1,10 +1,13 @@
 package com.example.supercoding2stsohee.repository.product;
 
+import com.example.supercoding2stsohee.repository.productOption.ProductOption;
+import com.example.supercoding2stsohee.repository.productPhoto.ProductPhoto;
 import com.example.supercoding2stsohee.repository.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "product")
 @Entity
@@ -44,6 +47,13 @@ public class Product {
 
     @Column(name = "finish_at")
     private LocalDateTime finishedAt;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProductPhoto> productPhotos;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProductOption> productOptions;
+
 
 
 }

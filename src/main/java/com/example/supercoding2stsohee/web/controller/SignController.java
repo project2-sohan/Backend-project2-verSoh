@@ -25,4 +25,7 @@ public class SignController{
         httpServletResponse.setHeader("Token", token);
         return "로그인 성공";
     }
+
+    //이메일 중복 체크
+    //회원탈퇴
 }

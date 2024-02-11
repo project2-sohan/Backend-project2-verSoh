@@ -1,14 +1,12 @@
 package com.example.supercoding2stsohee.web.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
@@ -17,15 +15,9 @@ public class UserResponse {
     private String phoneNumber;
     private String email;
     private String nickName;
-    private String password;
-    private String profile_img;
+    private String profileImg;
     private String address;
     private String gender;
     private String status;
     private Integer failureCount;
-    private LocalDateTime createdAt;
-    private LocalDateTime deletedAt;
-    private LocalDateTime lockedAt;
-
-
 }
