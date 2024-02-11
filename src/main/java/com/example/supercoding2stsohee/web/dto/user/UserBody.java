@@ -1,4 +1,4 @@
-package com.example.supercoding2stsohee.web.dto;
+package com.example.supercoding2stsohee.web.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

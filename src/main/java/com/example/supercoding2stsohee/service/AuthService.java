@@ -8,8 +8,8 @@ import com.example.supercoding2stsohee.repository.userRoles.UserRoles;
 import com.example.supercoding2stsohee.repository.userRoles.UserRolesJpa;
 import com.example.supercoding2stsohee.repository.user.UserJpa;
 import com.example.supercoding2stsohee.service.exceptions.NullPointerException;
-import com.example.supercoding2stsohee.web.dto.LoginRequest;
-import com.example.supercoding2stsohee.web.dto.SignUpRequest;
+import com.example.supercoding2stsohee.web.dto.sign.LoginRequest;
+import com.example.supercoding2stsohee.web.dto.sign.SignUpRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager; //securityConfig에 bean추가
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,4 +1,4 @@
-package com.example.supercoding2stsohee.web.dto;
+package com.example.supercoding2stsohee.web.dto.sign;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

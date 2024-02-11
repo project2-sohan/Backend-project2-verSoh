@@ -1,4 +1,4 @@
-package com.example.supercoding2stsohee.web.dto;
+package com.example.supercoding2stsohee.web.dto.user;
 
 import lombok.*;
 

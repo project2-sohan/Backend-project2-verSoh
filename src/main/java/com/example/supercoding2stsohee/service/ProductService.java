@@ -10,6 +10,7 @@ import com.example.supercoding2stsohee.repository.user.User;
 import com.example.supercoding2stsohee.repository.user.UserJpa;
 import com.example.supercoding2stsohee.repository.userDetails.CustomUserDetails;
 import com.example.supercoding2stsohee.service.exceptions.NotFoundException;
+import com.example.supercoding2stsohee.web.dto.product.ProductMainResponse;
 import com.example.supercoding2stsohee.web.dto.product.ProductRequest;
 import com.example.supercoding2stsohee.web.dto.ResponseDTO;
 import com.example.supercoding2stsohee.web.dto.product.ProductResponse;
@@ -83,16 +84,15 @@ public class ProductService {
                 return new ResponseDTO(200, "상품 등록 성공");
     }
 
-    public List<ProductResponse> findAllProducts() {
-        List<Product> products = productJpa.findAllProducts();
-        if(products.isEmpty()) throw new NotFoundException("등록된 판매 상품이 없습니다.");
-
-        List<ProductResponse> productResponse= products
-                .stream()
-                .map((p)-> )
-        return
-
-//        return products.stream().map(ProductResponse::mapFromProduct).collect(Collectors.toList());
-
-    }
+//    public List<ProductMainResponse> findAllProducts() {
+//        List<Product> products = productJpa.findAllProducts();
+//        //jpa에서 이것저것 찾아 entity로 반환하는데, 그러면 entity도 하나 더 만드니
+//        //그리고 그 엔티티를 ProductMainResponse라는 dto로?
+//        if(products.isEmpty()) throw new NotFoundException("등록된 판매 상품이 없습니다.");
+//
+//
+//
+////        return products.stream().map(ProductResponse::mapFromProduct).collect(Collectors.toList());
+//
+//    }
 }
