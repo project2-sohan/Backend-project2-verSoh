@@ -9,11 +9,15 @@ import com.example.supercoding2stsohee.repository.user.UserJpa;
 import com.example.supercoding2stsohee.repository.userDetails.CustomUserDetails;
 import com.example.supercoding2stsohee.service.exceptions.NotFoundException;
 import com.example.supercoding2stsohee.web.dto.ResponseDTO;
-import com.example.supercoding2stsohee.web.dto.ReviewRequest;
+import com.example.supercoding2stsohee.web.dto.review.ReviewRequest;
+import com.example.supercoding2stsohee.web.dto.review.ReviewResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +29,6 @@ public class ReviewService {
         User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
                 .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
 
-        //한솔! 1. product은 어떻게 받아오지?
-        //이 product에 대한 댓글이라는 것을 아는 법(여기서 1차때도 막혔음)
         Product product= productJpa.findById(productId)
                 .orElseThrow(()->new NotFoundException("아이디" + productId + "를 가진 상품이 없습니다."));
 
@@ -40,5 +42,36 @@ public class ReviewService {
 
         reviewJpa.save(review);
         return new ResponseDTO(200, "댓글 작성 성공");
+    }
+
+    @Transactional(transactionManager = "tm")
+    public ResponseDTO updateReview(CustomUserDetails customUserDetails, Integer reviewId, ReviewRequest reviewRequest) {
+        User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
+                .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
+        Review review= reviewJpa.findById(reviewId)
+                .orElseThrow(()-> new NotFoundException("아이디"+reviewId +"를 가진 리뷰를 찾지 못했습니다. "));
+        review.setReviewContents(reviewRequest.getReviewContents());
+        review.setScore(reviewRequest.getScore());
+
+        reviewJpa.save(review);
+        return new ResponseDTO(200, "리뷰 수정 완료");
+    }
+
+    public List<ReviewResponse> findReview(CustomUserDetails customUserDetails) {
+        User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
+                .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
+//        Review review= reviewJpa.findById(customUserDetails.getUserId())
+//                .orElseThrow(()-> new NotFoundException("유저"+ customUserDetails.getUsername() + "가 작성한 리뷰가 없습니다."));
+
+        List<Review> reviews= reviewJpa.findByUserId(customUserDetails.getUserId()); //JPQL?
+
+        List<ReviewResponse> reviewResponses= reviews.stream().map((r)->ReviewResponse.builder()
+                .reviewContents(r.getReviewContents())
+                .score(r.getScore())
+                .createdAt(r.getCreatedAt())
+                .build())
+                .collect(Collectors.toList());
+        return reviewResponses;
+
     }
 }
