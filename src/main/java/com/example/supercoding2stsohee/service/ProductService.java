@@ -83,16 +83,16 @@ public class ProductService {
                 return new ResponseDTO(200, "상품 등록 성공");
     }
 
-    public List<ProductResponse> findAllProducts() {
-        List<Product> products = productJpa.findAllProducts();
-        if(products.isEmpty()) throw new NotFoundException("등록된 판매 상품이 없습니다.");
-
-        List<ProductResponse> productResponse= products
-                .stream()
-                .map((p)-> )
-        return
-
+//    public List<ProductResponse> findAllProducts() {
+//        List<Product> products = productJpa.findAllProducts();
+//        if(products.isEmpty()) throw new NotFoundException("등록된 판매 상품이 없습니다.");
+//
+//        List<ProductResponse> productResponse= products
+//                .stream()
+//                .map((p)-> )
+//        return
+//
 //        return products.stream().map(ProductResponse::mapFromProduct).collect(Collectors.toList());
-
-    }
+//
+//    }
 }

@@ -29,10 +29,10 @@ public class ProductController{
         return productService.saveProduct(customUserDetails, productBody);
     }
 
-    @Operation(summary = "모든 상품 조회")
-    @GetMapping("/find")
-    public List<ProductResponse> findAllProducts(){
-        return productService.findAllProducts();
-    }
+//    @Operation(summary = "모든 상품 조회")
+//    @GetMapping("/find")
+//    public List<ProductResponse> findAllProducts(){
+//        return productService.findAllProducts();
+//    }
 
 }
