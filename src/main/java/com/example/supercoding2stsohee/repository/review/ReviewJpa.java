@@ -1,5 +1,6 @@
 package com.example.supercoding2stsohee.repository.review;
 
+import com.example.supercoding2stsohee.repository.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,10 @@ public interface ReviewJpa extends JpaRepository<Review, Integer> {
                     "WHERE u.userId = ?1"
     )
     List<Review> findByUserId(Integer userId);
+
+
+    List<Review> findByProduct(Product product);
+
+
+
 }

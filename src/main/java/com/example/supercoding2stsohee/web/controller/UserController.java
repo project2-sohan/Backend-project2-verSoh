@@ -30,6 +30,11 @@ public class UserController implements ApiController {
     }
 
 //내 장바구니 조회
+//@Operation(summary = "장바구니 조회")
+//@GetMapping("/my-cart")
+//public ResponseDTO getUserCart(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+//    return userService.getUserCart(customUserDetails);
+//}
 //내 구매목록 조회
 //주문
 }

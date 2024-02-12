@@ -57,7 +57,7 @@ public class ReviewService {
         return new ResponseDTO(200, "리뷰 수정 완료");
     }
 
-    public List<ReviewResponse> findReview(CustomUserDetails customUserDetails) {
+    public ResponseDTO findUserReview(CustomUserDetails customUserDetails) {
         User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
                 .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
 //        Review review= reviewJpa.findById(customUserDetails.getUserId())
@@ -71,7 +71,23 @@ public class ReviewService {
                 .createdAt(r.getCreatedAt())
                 .build())
                 .collect(Collectors.toList());
-        return reviewResponses;
+        return new ResponseDTO(200, "유저가 작성한 후기 조회 성공", reviewResponses);
+
+    }
+
+    public ResponseDTO findReviewByProductId(Integer productId) {
+        Product product = productJpa.findById(productId)
+                .orElseThrow(() -> new NotFoundException("NOT FOUND PRODUCT"));
+        List<Review> reviews= reviewJpa.findByProduct(product);
+
+        List<ReviewResponse> reviewResponses= reviews.stream().map((r)->ReviewResponse.builder()
+                        .reviewContents(r.getReviewContents())
+                        .score(r.getScore())
+                        .createdAt(r.getCreatedAt())
+                        .build())
+                .collect(Collectors.toList());
+        return new ResponseDTO(200, "상품 아이디별로 후기 조회 성공", reviewResponses);
+
 
     }
 }

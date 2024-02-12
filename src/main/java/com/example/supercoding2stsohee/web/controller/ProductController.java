@@ -30,10 +30,30 @@ public class ProductController implements ApiController{
         return productService.saveProduct(customUserDetails, productRequest);
     }
 
-//    @Operation(summary = "모든 상품 일부 정보 조회해 메인 페이지")
-//    @GetMapping("/find")
-//    public List<ProductMainResponse> findAllProducts(){
-//        return productService.findAllProducts();
-//    }
+    @Operation(summary = "모든 상품 일부 정보 조회해 메인 페이지")
+    @GetMapping("/find/main-page")
+    public ResponseDTO findAllProducts(){
+        return productService.findAllProducts();
+    }
+
+
+    @Operation(summary = "하나의 상품에 대해 상세 조회")
+    @GetMapping("/find/detail/{productId}")
+    public ResponseDTO findProductDetail(@PathVariable Integer productId){
+        return productService.findProductDetail(productId);
+    }
+
+    @Operation(summary = "카테고리별로 상품에 조회")
+    @GetMapping("/find/category")
+    public ResponseDTO findProductByCategory(@RequestParam String category){
+        return productService.findProductByCategory(category);
+    }
+
+    @Operation(summary = "키워드로 상품 조회")
+    @GetMapping("/find/{keyword}")
+    public ResponseDTO findProductByKeyword(@PathVariable String keyword){
+        return productService.findProductByKeyword(keyword);
+    }
+
 
 }
