@@ -2,6 +2,7 @@ package com.example.supercoding2stsohee.repository.product;
 
 import com.example.supercoding2stsohee.repository.productOption.ProductOption;
 import com.example.supercoding2stsohee.repository.productPhoto.ProductPhoto;
+import com.example.supercoding2stsohee.repository.review.Review;
 import com.example.supercoding2stsohee.repository.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,6 +54,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductOption> productOptions;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Review> reviews;
 
 
 

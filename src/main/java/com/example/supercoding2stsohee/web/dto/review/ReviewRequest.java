@@ -1,6 +1,5 @@
-package com.example.supercoding2stsohee.web.dto;
+package com.example.supercoding2stsohee.web.dto.review;
 
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,12 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewResponse {
-    private Integer reviewId;
-    private Integer userId;
-    private Integer productId;
+public class ReviewRequest {
     private String reviewContents;
     private Integer score;
-    private LocalDateTime createdAt;
 
 }

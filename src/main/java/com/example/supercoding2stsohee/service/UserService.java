@@ -4,10 +4,9 @@ import com.example.supercoding2stsohee.repository.user.User;
 import com.example.supercoding2stsohee.repository.user.UserJpa;
 import com.example.supercoding2stsohee.repository.userDetails.CustomUserDetails;
 import com.example.supercoding2stsohee.service.exceptions.NotFoundException;
-import com.example.supercoding2stsohee.service.exceptions.NullPointerException;
 import com.example.supercoding2stsohee.web.dto.ResponseDTO;
-import com.example.supercoding2stsohee.web.dto.UserBody;
-import com.example.supercoding2stsohee.web.dto.UserResponse;
+import com.example.supercoding2stsohee.web.dto.user.UserBody;
+import com.example.supercoding2stsohee.web.dto.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,4 +47,9 @@ public class UserService {
         userJpa.save(user);
         return new ResponseDTO(200, "회원정보 수정 성공");
     }
+
+
+//    public ResponseDTO getUserCart(CustomUserDetails customUserDetails) {
+//
+//    }
 }

@@ -16,23 +16,43 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/product")
-public class ProductController{
+public class ProductController implements ApiController{
 
     private final ProductService productService;
 
     //상품등록
 
-    @Operation(summary = "새로운 product 생성")
+    @Operation(summary = "새로운 product 등록")
     @PostMapping("/register")
     public ResponseDTO registerProduct(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                       @RequestBody ProductRequest productBody){
-        return productService.saveProduct(customUserDetails, productBody);
+                                       @RequestBody ProductRequest productRequest){
+        return productService.saveProduct(customUserDetails, productRequest);
     }
 
-//    @Operation(summary = "모든 상품 조회")
-//    @GetMapping("/find")
-//    public List<ProductResponse> findAllProducts(){
-//        return productService.findAllProducts();
-//    }
+    @Operation(summary = "모든 상품 일부 정보 조회해 메인 페이지")
+    @GetMapping("/find/main-page")
+    public ResponseDTO findAllProducts(){
+        return productService.findAllProducts();
+    }
+
+
+    @Operation(summary = "하나의 상품에 대해 상세 조회")
+    @GetMapping("/find/detail/{productId}")
+    public ResponseDTO findProductDetail(@PathVariable Integer productId){
+        return productService.findProductDetail(productId);
+    }
+
+    @Operation(summary = "카테고리별로 상품에 조회")
+    @GetMapping("/find/category")
+    public ResponseDTO findProductByCategory(@RequestParam String category){
+        return productService.findProductByCategory(category);
+    }
+
+    @Operation(summary = "키워드로 상품 조회")
+    @GetMapping("/find/{keyword}")
+    public ResponseDTO findProductByKeyword(@PathVariable String keyword){
+        return productService.findProductByKeyword(keyword);
+    }
+
 
 }
