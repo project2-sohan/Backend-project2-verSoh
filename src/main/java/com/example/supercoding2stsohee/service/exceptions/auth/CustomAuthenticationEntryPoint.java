@@ -1,4 +1,4 @@
-package com.example.supercoding2stsohee.service.exceptions;
+package com.example.supercoding2stsohee.service.exceptions.auth;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

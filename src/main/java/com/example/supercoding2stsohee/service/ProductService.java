@@ -40,7 +40,7 @@ public class ProductService {
     //상품 등록
     public ResponseDTO saveProduct(CustomUserDetails customUserDetails, ProductRequest productRequest) {
         User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
-                .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
+                .orElseThrow(()-> new NotFoundException("해당 이메일에 해당하는 유저를 찾을 수 없습니다.", customUserDetails.getEmail()));
         Product product= Product.builder()
                 .user(user)
                 .productName(productRequest.getProductName())
@@ -95,14 +95,14 @@ public class ProductService {
 
     public ResponseDTO findAllProducts() {
         List<ProductMainResponse> products = productJpa.findAllProducts();
-        if(products.isEmpty()) throw new NotFoundException("등록된 판매 상품이 없습니다.");
+        if(products.isEmpty()) throw new NotFoundException("등록된 판매 상품이 없습니다.", "");
 
         return new ResponseDTO(200, "메인 페이지 상품 보이기 성공", products);
     }
 
     public ResponseDTO findProductDetail(Integer productId) {
         Product product = productJpa.findById(productId)
-                .orElseThrow(() -> new NotFoundException("해당 아이디" + productId + "상품을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 상품을 찾을 수 없습니다.", productId));
 
         List<Review> reviews = reviewJpa.findByProduct(product);
         Double reviewAvg = reviews.stream().collect(Collectors.averagingDouble(Review::getScore));

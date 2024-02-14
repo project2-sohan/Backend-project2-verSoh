@@ -17,7 +17,7 @@ public class UserService {
     private final UserJpa userJpa;
     public ResponseDTO findUserByEmail(CustomUserDetails customUserDetails) {
         User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
-                .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
+                .orElseThrow(()-> new NotFoundException("해당 이메일에 해당하는 유저를 찾을 수 없습니다.", customUserDetails.getEmail()));
 
         UserResponse userResponse = UserResponse.builder()
                 .userId(user.getUserId())
@@ -39,7 +39,7 @@ public class UserService {
     @Transactional(transactionManager = "tm")
     public ResponseDTO updateUser(CustomUserDetails customUserDetails, UserBody userBody) {
         User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
-                .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
+                .orElseThrow(()-> new NotFoundException("해당 이메일에 해당하는 유저를 찾을 수 없습니다.", customUserDetails.getEmail()));
         user.setPhoneNumber(userBody.getPhoneNumber());
         user.setEmail(userBody.getEmail());
         user.setNickName(userBody.getNickName());

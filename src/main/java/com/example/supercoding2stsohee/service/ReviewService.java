@@ -27,10 +27,10 @@ public class ReviewService {
     private final ReviewJpa reviewJpa;
     public ResponseDTO saveReview(CustomUserDetails customUserDetails, Integer productId, ReviewRequest reviewRequest) {
         User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
-                .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
+                .orElseThrow(()-> new NotFoundException("해당 이메일에 해당하는 유저를 찾을 수 없습니다.", customUserDetails.getEmail()));
 
         Product product= productJpa.findById(productId)
-                .orElseThrow(()->new NotFoundException("아이디" + productId + "를 가진 상품이 없습니다."));
+                .orElseThrow(()->new NotFoundException("해당 아이디로 상품을 찾을 수 없습니다.", productId));
 
         Review review= Review.builder()
                 .user(user)
@@ -47,9 +47,9 @@ public class ReviewService {
     @Transactional(transactionManager = "tm")
     public ResponseDTO updateReview(CustomUserDetails customUserDetails, Integer reviewId, ReviewRequest reviewRequest) {
         User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
-                .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
+                .orElseThrow(()-> new NotFoundException("해당 이메일에 해당하는 유저를 찾을 수 없습니다.", customUserDetails.getEmail()));
         Review review= reviewJpa.findById(reviewId)
-                .orElseThrow(()-> new NotFoundException("아이디"+reviewId +"를 가진 리뷰를 찾지 못했습니다. "));
+                .orElseThrow(()-> new NotFoundException("해당 리뷰가 존재하지 않습니다.", reviewId));
         review.setReviewContents(reviewRequest.getReviewContents());
         review.setScore(reviewRequest.getScore());
 
@@ -59,7 +59,7 @@ public class ReviewService {
 
     public ResponseDTO findUserReview(CustomUserDetails customUserDetails) {
         User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
-                .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
+                .orElseThrow(()-> new NotFoundException("해당 이메일에 해당하는 유저를 찾을 수 없습니다.", customUserDetails.getEmail()));
 //        Review review= reviewJpa.findById(customUserDetails.getUserId())
 //                .orElseThrow(()-> new NotFoundException("유저"+ customUserDetails.getUsername() + "가 작성한 리뷰가 없습니다."));
 
@@ -77,7 +77,7 @@ public class ReviewService {
 
     public ResponseDTO findReviewByProductId(Integer productId) {
         Product product = productJpa.findById(productId)
-                .orElseThrow(() -> new NotFoundException("NOT FOUND PRODUCT"));
+                .orElseThrow(() -> new NotFoundException("해당 상품이 존재하지 않습니다.", productId));
         List<Review> reviews= reviewJpa.findByProduct(product);
 
         List<ReviewResponse> reviewResponses= reviews.stream().map((r)->ReviewResponse.builder()

@@ -7,6 +7,9 @@ import com.example.supercoding2stsohee.repository.user.User;
 import com.example.supercoding2stsohee.repository.userRoles.UserRoles;
 import com.example.supercoding2stsohee.repository.userRoles.UserRolesJpa;
 import com.example.supercoding2stsohee.repository.user.UserJpa;
+import com.example.supercoding2stsohee.service.exceptions.AccessDenied;
+import com.example.supercoding2stsohee.service.exceptions.BadRequestException;
+import com.example.supercoding2stsohee.service.exceptions.NotFoundException;
 import com.example.supercoding2stsohee.service.exceptions.NullPointerException;
 import com.example.supercoding2stsohee.web.dto.sign.LoginRequest;
 import com.example.supercoding2stsohee.web.dto.sign.SignUpRequest;
@@ -22,6 +25,7 @@ import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,17 +34,38 @@ public class AuthService {
     private final RolesJpa rolesJpa;
     private final UserRolesJpa userRolesJpa;
     private final UserJpa userJpa;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
+    private static boolean isValidPhoneNumber(String phoneNumber) {
+        // 정규 표현식을 사용하여 핸드폰 번호가 01로 시작하고 총 11자리인지 확인합니다.
+        String regex = "^01\\d{9}$";
+        return Pattern.matches(regex, phoneNumber);
+    }
+
+
     @Transactional(transactionManager = "tm")
-    public boolean signUp(SignUpRequest signUpRequest) {
-        if(userJpa.existsByEmail(signUpRequest.getEmail())){
-            return false;
+    public String signUp(SignUpRequest signUpRequest) {
+        // 이메일 중복 확인
+        if(userJpa.existsByEmail(signUpRequest.getEmail()))
+            throw new BadRequestException("이미 가입된 이메일입니다.", signUpRequest.getEmail());
+
+        // 연락처 형식 Exception
+        if (!isValidPhoneNumber(signUpRequest.getPhoneNumber()))
+            throw new BadRequestException("연락처 입력 오류", signUpRequest.getPhoneNumber());
+
+        // 기본 프로필이미지 설정
+        String userProfileImg;
+        if (signUpRequest.getProfileImg() != null && signUpRequest.getProfileImg().isEmpty()) {
+            userProfileImg = signUpRequest.getProfileImg();
+        }else{
+            userProfileImg = "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=";
         }
+
+        // 성별은 "남성", 혹은 "여성" 으로 입력필수
+        if (!"남성".equals(signUpRequest.getGender()) && !"여성".equals(signUpRequest.getGender()))
+            throw new BadRequestException("성별은 '남성' 혹은 '여성' 이여야합니다.", signUpRequest.getGender());
 
         Roles roles= rolesJpa.findByName("ROLE_USER");
 
@@ -50,7 +75,7 @@ public class AuthService {
                 .email(signUpRequest.getEmail())
                 .nickName(signUpRequest.getNickName())
                 .password(passwordEncoder.encode(signUpRequest.getPassword())) //passwordEncoder
-                .profileImg(signUpRequest.getProfileImg())
+                .profileImg(userProfileImg)
                 .address(signUpRequest.getAddress())
                 .gender(signUpRequest.getGender())
                 .status("normal")
@@ -64,7 +89,7 @@ public class AuthService {
                         .roles(roles)
                         .build()
         );
-        return true;
+        return "회원가입 성공";
     }
 
     public String login(LoginRequest loginRequest) {
@@ -74,7 +99,7 @@ public class AuthService {
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             User user= userJpa.findByEmailFetchJoin(loginRequest.getEmail())
-                    .orElseThrow(()-> new NullPointerException("해당 이메일로 계정을 찾을 수 없습니다."));
+                    .orElseThrow(()-> new NotFoundException("해당 이메일에 해당하는 유저를 찾을 수 없습니다.", loginRequest.getEmail()));
             List<String> roles= user.getUserRoles().stream().map(UserRoles::getRoles).map(Roles::getName).collect(Collectors.toList());
             return jwtTokenProvider.createToken(loginRequest.getEmail(), roles);
         }catch(Exception e){

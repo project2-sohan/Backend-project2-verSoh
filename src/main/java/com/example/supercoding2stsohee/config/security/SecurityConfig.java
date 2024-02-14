@@ -1,7 +1,7 @@
 package com.example.supercoding2stsohee.config.security;
 
-import com.example.supercoding2stsohee.service.exceptions.CustomAccessDeniedHandler;
-import com.example.supercoding2stsohee.service.exceptions.CustomAuthenticationEntryPoint;
+import com.example.supercoding2stsohee.service.exceptions.auth.CustomAccessDeniedHandler;
+import com.example.supercoding2stsohee.service.exceptions.auth.CustomAuthenticationEntryPoint;
 import com.example.supercoding2stsohee.web.filters.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

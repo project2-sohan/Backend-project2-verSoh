@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/my-page")
-public class UserController implements ApiController {
+public class UserController {
     private final UserService userService;
     //가입정보 조회
     @Operation(summary = "이메일로 유저 찾기")

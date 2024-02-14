@@ -3,12 +3,13 @@ package com.example.supercoding2stsohee.service.exceptions;
 import lombok.Getter;
 
 @Getter
-public class NotFoundException extends RuntimeException{
+public class BadRequestException extends RuntimeException{
     private String detailMessage;
     private Object request;
 
-    public NotFoundException(String detailMessage, Object request) {
+    public BadRequestException(String detailMessage, Object request) {
         this.detailMessage = detailMessage;
         this.request = request;
     }
+
 }

@@ -4,18 +4,15 @@ import com.example.supercoding2stsohee.repository.userDetails.CustomUserDetails;
 import com.example.supercoding2stsohee.service.ReviewService;
 import com.example.supercoding2stsohee.web.dto.ResponseDTO;
 import com.example.supercoding2stsohee.web.dto.review.ReviewRequest;
-import com.example.supercoding2stsohee.web.dto.review.ReviewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
-public class ReviewController implements ApiController{
+public class ReviewController {
     private final ReviewService reviewService;
 
     @Operation(summary = "리뷰 등록")

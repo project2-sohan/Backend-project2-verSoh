@@ -22,9 +22,9 @@ public class CartService {
 
     public ResponseDTO addToCart(CustomUserDetails customUserDetails, Integer productOptionId, Integer addAmount) {
         User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
-                .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
+                .orElseThrow(()-> new NotFoundException("해당 이메일에 해당하는 유저를 찾을 수 없습니다.", customUserDetails.getEmail()));
         ProductOption productOption= productOptionJpa.findById(productOptionId)
-                .orElseThrow(()-> new NotFoundException("해당 아이디를 가진 옵션을 찾지 못했습니다."));
+                .orElseThrow(()-> new NotFoundException("해당 아이디를 가진 옵션을 찾지 못했습니다.", productOptionId));
         Cart cart= Cart.builder()
                 .productOption(productOption)
                 .user(user)

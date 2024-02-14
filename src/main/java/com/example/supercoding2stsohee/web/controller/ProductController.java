@@ -1,27 +1,22 @@
 package com.example.supercoding2stsohee.web.controller;
 
-import com.example.supercoding2stsohee.repository.product.Product;
 import com.example.supercoding2stsohee.repository.userDetails.CustomUserDetails;
 import com.example.supercoding2stsohee.service.ProductService;
 import com.example.supercoding2stsohee.web.dto.product.ProductRequest;
 import com.example.supercoding2stsohee.web.dto.ResponseDTO;
-import com.example.supercoding2stsohee.web.dto.product.ProductResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/product")
-public class ProductController implements ApiController{
+public class ProductController {
 
     private final ProductService productService;
 
     //상품등록
-
     @Operation(summary = "새로운 product 등록")
     @PostMapping("/register")
     public ResponseDTO registerProduct(@AuthenticationPrincipal CustomUserDetails customUserDetails,
