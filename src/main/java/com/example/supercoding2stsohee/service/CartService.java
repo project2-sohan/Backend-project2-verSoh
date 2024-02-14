@@ -7,9 +7,9 @@ import com.example.supercoding2stsohee.repository.productOption.ProductOptionJpa
 import com.example.supercoding2stsohee.repository.user.User;
 import com.example.supercoding2stsohee.repository.user.UserJpa;
 import com.example.supercoding2stsohee.repository.userDetails.CustomUserDetails;
+import com.example.supercoding2stsohee.service.exceptions.NotEnoughStockException;
 import com.example.supercoding2stsohee.service.exceptions.NotFoundException;
 import com.example.supercoding2stsohee.web.dto.ResponseDTO;
-import com.example.supercoding2stsohee.web.dto.cart.CartRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +25,9 @@ public class CartService {
                 .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
         ProductOption productOption= productOptionJpa.findById(productOptionId)
                 .orElseThrow(()-> new NotFoundException("해당 아이디를 가진 옵션을 찾지 못했습니다."));
+        if(productOption.getStock() < addAmount){
+            throw new NotEnoughStockException("상품 재고가 부족합니다. 상품은 "+ productOption.getStock() + "개 남았습니다.");
+        }
         Cart cart= Cart.builder()
                 .productOption(productOption)
                 .user(user)

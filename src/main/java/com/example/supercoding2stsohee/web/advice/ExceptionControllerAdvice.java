@@ -2,6 +2,7 @@ package com.example.supercoding2stsohee.web.advice;
 
 import com.example.supercoding2stsohee.service.exceptions.InvalidValueException;
 import com.example.supercoding2stsohee.service.exceptions.NotAcceptException;
+import com.example.supercoding2stsohee.service.exceptions.NotEnoughStockException;
 import com.example.supercoding2stsohee.service.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,13 @@ public class ExceptionControllerAdvice {
     public String handleNullPointerException(NullPointerException npe){
         log.error("클라이언트 요청에 문제가 있습니다. Null pointer Exception: "+ npe.getMessage());
         return npe.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NotEnoughStockException.class)
+    public String handleNotEnoughStockException(NotEnoughStockException nese){
+        log.error("클라이언트 요청에 문제가 있습니다. Not Enough Stock Exception: "+ nese.getMessage());
+        return nese.getMessage();
     }
 
 }
