@@ -72,9 +72,4 @@ public class ProductController implements ApiController{
                                      @PathVariable Integer productId){
         return productService.deleteProduct(customUserDetails, productId);
     }
-
-
-
-
-
 }
