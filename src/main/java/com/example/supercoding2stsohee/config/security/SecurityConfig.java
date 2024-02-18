@@ -32,10 +32,11 @@ public class SecurityConfig {
                 .sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(a ->
                                 a
-                                        .requestMatchers("/resources/static/**", "/sign-up", "/login").permitAll() // 로그인 안해도 가능
+                                        .requestMatchers("/resources/static/**", "/sign-up", "/login", "/logout").permitAll() // 로그인 안해도 가능
                                         .requestMatchers("/test").hasRole("USER") // user 권한이 있어야 가능
                         // DB ROLE 테이블에는 ROLE_USER이라고 되어있지만 여기서 USER만 넣어도 앞에 `ROLE_`이 자동으로 붙음
                 )
+
                 .exceptionHandling(e->{
                     e.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
                     e.accessDeniedHandler(new CustomAccessDeniedHandler());

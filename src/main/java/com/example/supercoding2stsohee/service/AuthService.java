@@ -7,10 +7,12 @@ import com.example.supercoding2stsohee.repository.user.User;
 import com.example.supercoding2stsohee.repository.userRoles.UserRoles;
 import com.example.supercoding2stsohee.repository.userRoles.UserRolesJpa;
 import com.example.supercoding2stsohee.repository.user.UserJpa;
+import com.example.supercoding2stsohee.service.exceptions.NotFoundException;
 import com.example.supercoding2stsohee.service.exceptions.NullPointerException;
 import com.example.supercoding2stsohee.web.dto.sign.LoginRequest;
 import com.example.supercoding2stsohee.web.dto.sign.SignUpRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager; //securityConfig에 bean추가
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -75,11 +77,20 @@ public class AuthService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             User user= userJpa.findByEmailFetchJoin(loginRequest.getEmail())
                     .orElseThrow(()-> new NullPointerException("해당 이메일로 계정을 찾을 수 없습니다."));
+            if(user.getStatus().equals("withdrawl")) throw new AccessDeniedException("탈퇴한 회원입니다.");
+
             List<String> roles= user.getUserRoles().stream().map(UserRoles::getRoles).map(Roles::getName).collect(Collectors.toList());
             return jwtTokenProvider.createToken(loginRequest.getEmail(), roles);
         }catch(Exception e){
             e.printStackTrace();
             throw new NotAcceptableStatusException("로그인 할 수 없습니다.");
         }
+    }
+
+    public void withdrawl(String userEmail) {
+        User user= userJpa.findByEmail(userEmail)
+                .orElseThrow(()-> new NotFoundException("해당 이메일로 계정을 찾을 수 없습니다."));
+        user.setStatus("withdrawl");
+        userJpa.save(user);
     }
 }

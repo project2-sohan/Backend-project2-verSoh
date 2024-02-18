@@ -72,7 +72,9 @@ public class UserService {
             return new ResponseDTO(200, "장바구니가 비었습니다");
         }
 
+
         List<CartResponseList> cartResponseLists= carts.stream()
+                .filter(cart-> !cart.getProductOption().getProduct().getProductStatus().equals("soldOut"))
                 .map((cart)-> {
                     Product product= cart.getProductOption().getProduct();
 

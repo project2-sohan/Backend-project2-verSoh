@@ -14,10 +14,12 @@ public interface UserJpa extends JpaRepository<User, Integer> {
                     "FROM User u " +
                     "JOIN FETCH u.userRoles ur " +
                     "JOIN FETCH ur.roles r " +
-                    "WHERE u.email = ?1 "
+                    "WHERE u.email = ?1 AND u.status = 'normal' "
     )
 
     Optional<User> findByEmailFetchJoin(String email);
 
     boolean existsByEmail(String email);
+
+    Optional<User> findByEmail(String userEmail);
 }

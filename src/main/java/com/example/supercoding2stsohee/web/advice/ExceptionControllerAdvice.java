@@ -1,14 +1,13 @@
 package com.example.supercoding2stsohee.web.advice;
 
-import com.example.supercoding2stsohee.service.exceptions.InvalidValueException;
-import com.example.supercoding2stsohee.service.exceptions.NotAcceptException;
-import com.example.supercoding2stsohee.service.exceptions.NotEnoughStockException;
-import com.example.supercoding2stsohee.service.exceptions.NotFoundException;
+import com.example.supercoding2stsohee.service.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.lang.NullPointerException;
 
 @RestControllerAdvice
 @Slf4j
@@ -49,4 +48,11 @@ public class ExceptionControllerAdvice {
         return nese.getMessage();
     }
 
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(SoldOutException.class)
+    public String handleSoldOutException(SoldOutException soe){
+        log.error("클라이언트 요청에 문제가 있습니다. Sold Out Exception: "+ soe.getMessage());
+        return soe.getMessage();
+    }
 }

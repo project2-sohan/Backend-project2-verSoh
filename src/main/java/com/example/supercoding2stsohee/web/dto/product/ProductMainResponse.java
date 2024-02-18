@@ -16,16 +16,18 @@ public class ProductMainResponse {
     private String productName;
     private Integer productPrice;
     private String category;
+    private String productStatus;
     private LocalDateTime createAt;
     private String mainPhotoUrl;
     private Integer reviewCount;
     private Float scoreAvg;
 
-    public ProductMainResponse(Integer productId, Integer userId, String productName, Integer productPrice, String category, LocalDateTime createAt, String mainPhotoUrl, Long reviewCount, Double scoreAvg) {
+    public ProductMainResponse(Integer productId, Integer userId, String productName, Integer productPrice, String productStatus, String category, LocalDateTime createAt, String mainPhotoUrl, Long reviewCount, Double scoreAvg) {
         this.productId = productId;
         this.userId = userId;
         this.productName = productName;
         this.productPrice = productPrice;
+        this.productStatus= productStatus;
         this.category = category;
         this.createAt = createAt;
         this.mainPhotoUrl = mainPhotoUrl;

@@ -14,9 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -27,6 +25,7 @@ public class JwtTokenProvider {
     @Value("${jwtpassword.source}")
     private String secretKey;
     private String key;
+
 
     @PostConstruct
     public void setUp(){  // JWT_SECRET_KEY를 인코딩
@@ -65,5 +64,15 @@ public class JwtTokenProvider {
     }
     public String getUserEmail(String jwtToken){
         return Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken).getBody().getSubject();
+    }
+
+    //logout
+    private Set<String> tokenBlackList= new HashSet<>();
+
+    public void addToBlackList(String jwtToken){
+        tokenBlackList.add(jwtToken);
+    }
+    public boolean isTokenBlackListed(String jwtToken){
+        return tokenBlackList.contains(jwtToken);
     }
 }

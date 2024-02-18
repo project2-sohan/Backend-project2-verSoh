@@ -1,5 +1,7 @@
 package com.example.supercoding2stsohee.service;
 
+import com.example.supercoding2stsohee.repository.cart.Cart;
+import com.example.supercoding2stsohee.repository.cart.CartJpa;
 import com.example.supercoding2stsohee.repository.product.Product;
 import com.example.supercoding2stsohee.repository.product.ProductJpa;
 import com.example.supercoding2stsohee.repository.productOption.ProductOption;
@@ -11,7 +13,9 @@ import com.example.supercoding2stsohee.repository.review.ReviewJpa;
 import com.example.supercoding2stsohee.repository.user.User;
 import com.example.supercoding2stsohee.repository.user.UserJpa;
 import com.example.supercoding2stsohee.repository.userDetails.CustomUserDetails;
+import com.example.supercoding2stsohee.service.exceptions.NotEnoughStockException;
 import com.example.supercoding2stsohee.service.exceptions.NotFoundException;
+import com.example.supercoding2stsohee.service.exceptions.SoldOutException;
 import com.example.supercoding2stsohee.web.dto.product.*;
 import com.example.supercoding2stsohee.web.dto.ResponseDTO;
 import com.example.supercoding2stsohee.web.dto.review.ReviewResponse;
@@ -19,6 +23,8 @@ import com.example.supercoding2stsohee.web.dto.review.ReviewUserDto;
 import io.swagger.models.auth.In;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -35,6 +41,7 @@ public class ProductService {
     private final ProductPhotoJpa productPhotoJpa;
     private final ProductOptionJpa productOptionJpa;
     private final ReviewJpa reviewJpa;
+    private final CartJpa cartJpa;
 
 
     //상품 등록
@@ -91,18 +98,36 @@ public class ProductService {
                 return new ResponseDTO(200, "상품 등록 성공");
     }
 
+    //pageable 전
+//    public ResponseDTO findAllProducts() {
+//        List<ProductMainResponse> products = productJpa.findAllProducts();
+//        if(products.isEmpty()) throw new NotFoundException("등록된 판매 상품이 없습니다.");
+//
+////////JPQL에서 상품 판매 종료된 상품은 보이지 않도록 설정, 서비스에서도 할 수 있긴 함.
+////////        List<ProductMainResponse> filteredProducts = products.stream().filter((p)->p.getProductStatus().equals("normal")).toList();
+//
+//        return new ResponseDTO(200, "메인 페이지 상품 보이기 성공", products);
+////////       return new ResponseDTO(200, "메인 페이지 상품 보이기 성공", filteredProducts);
+//    }
 
 
-    public ResponseDTO findAllProducts() {
-        List<ProductMainResponse> products = productJpa.findAllProducts();
+
+    public ResponseDTO findAllProducts(Pageable pageable) {
+        Page<ProductMainResponse> products = productJpa.findAllProducts(pageable);
         if(products.isEmpty()) throw new NotFoundException("등록된 판매 상품이 없습니다.");
 
+//JPQL에서 상품 판매 종료된 상품은 보이지 않도록 설정, 서비스에서도 할 수 있긴 함.
+//        List<ProductMainResponse> filteredProducts = products.stream().filter((p)->p.getProductStatus().equals("normal")).toList();
+
         return new ResponseDTO(200, "메인 페이지 상품 보이기 성공", products);
+//        return new ResponseDTO(200, "메인 페이지 상품 보이기 성공", filteredProducts);
     }
 
     public ResponseDTO findProductDetail(Integer productId) {
         Product product = productJpa.findById(productId)
                 .orElseThrow(() -> new NotFoundException("해당 아이디" + productId + "상품을 찾을 수 없습니다."));
+
+        if(product.getProductStatus().equals("soldOut")) throw new SoldOutException("판매 종료된 상품입니다.");
 
         List<Review> reviews = reviewJpa.findByProduct(product);
         Double reviewAvg = reviews.stream().collect(Collectors.averagingDouble(Review::getScore));
@@ -143,23 +168,43 @@ public class ProductService {
 
     }
 
-    public ResponseDTO findProductByCategory(String category) {
+    public ResponseDTO findProductByCategory(String category, Pageable pageable) {
 
         String[] categories = {"top", "pants", "dress", "shoe" };
+//pagination사용하기 전 list로 반환하는 코드
+//        Page<ProductMainResponse> products = productJpa.findAllProducts(pageable);
+//        List<ProductMainResponse> productCategory = products.stream().filter((p)-> p.getCategory().equals(category)).toList();
+//        return new ResponseDTO(200, "카테고리별로 제품 조회 성공", productCategory);
+        Page<ProductMainResponse> products= productJpa.findProductsByCategory(category, pageable);
 
-        List<ProductMainResponse> products = productJpa.findAllProducts();
+        return new ResponseDTO(200, "페이지네이션 적용해 카테고리별로 제품 조회 성공", products);
 
-        List<ProductMainResponse> productCategory = products.stream().filter((p)-> p.getCategory().equals(category)).toList();
-
-        return new ResponseDTO(200, "카테고리별로 제품 조회 성공", productCategory);
     }
 
-    public ResponseDTO findProductByKeyword(String keyword) {
+    public ResponseDTO findProductByKeyword(String keyword, Pageable pageable) {
         String checkKeyword= keyword.toLowerCase();
-        List<ProductMainResponse> products = productJpa.findAllProducts();
+        Page<ProductMainResponse> products = productJpa.findAllProducts(pageable);
+        if(products.isEmpty()) throw new SoldOutException("판매 종료된 상품입니다");
 
         List<ProductMainResponse> productKeyword= products.stream().filter((p)->p.getProductName().toLowerCase().contains(checkKeyword)).toList();
 
         return new ResponseDTO(200, "키워드로 제품 조회 성공", productKeyword);
+    }
+
+
+    public ResponseDTO deleteProduct(CustomUserDetails customUserDetails, Integer productId) {
+        User user= userJpa.findByEmailFetchJoin(customUserDetails.getEmail())
+                .orElseThrow(()-> new NotFoundException("이메일" + customUserDetails.getEmail() + "을 가진 유저를 찾지 못했습니다."));
+        Product product = productJpa.findById(productId)
+                .orElseThrow(() -> new NotFoundException("해당 아이디" + productId + "상품을 찾을 수 없습니다."));
+        product.setProductStatus("soldOut");
+
+        productJpa.save(product);
+        //재고 0으로 만들기
+        List<ProductOption> productOption= productOptionJpa.findByProduct(product);
+        productOption.forEach((po)-> po.setStock(0));
+        productOptionJpa.saveAll(productOption);
+
+    return new ResponseDTO(200, "상품 판매 종료 성공");
     }
 }
