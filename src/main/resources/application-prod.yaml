@@ -1,0 +1,17 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+logging:
+  config: classpath:logback-spring-prod.xml
+
+datasource:
+  driver-class-name: org.mariadb.jdbc.Driver
+
+#  url: jdbc:mariadb://sohan2.c7suy242wrpp.eu-west-1.rds.amazonaws.com:3306/shopping_mall?useUnicode=true&characterEncoding=UTF-8
+
+# 한솔DB
+  url: jdbc:mariadb://database-2.c4lmd1bsphpd.ap-northeast-2.rds.amazonaws.com/shopping_mall
+
+
