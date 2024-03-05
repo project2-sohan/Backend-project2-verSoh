@@ -48,6 +48,8 @@ dependencies {
 
     //security 무슨 에러 난다는거지?
     implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.security:spring-security-web:5.0.0.RELEASE'
+//    implementation 'org.springframework.security:spring-security-config:5.0.0.RELEASE'
 
 }
 

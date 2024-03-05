@@ -6,7 +6,7 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "roleId")
+@EqualsAndHashCode(of = "rolesId")
 @Table(name = "roles")
 public class Roles {
 
