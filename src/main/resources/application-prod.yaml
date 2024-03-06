@@ -8,10 +8,11 @@ logging:
 
 datasource:
   driver-class-name: org.mariadb.jdbc.Driver
-
-#  url: jdbc:mariadb://sohan2.c7suy242wrpp.eu-west-1.rds.amazonaws.com:3306/shopping_mall?useUnicode=true&characterEncoding=UTF-8
+  url: jdbc:mariadb://sohan2.c7suy242wrpp.eu-west-1.rds.amazonaws.com:3306/shopping_mall?useUnicode=true&characterEncoding=UTF-8
 
 # 한솔DB
-  url: jdbc:mariadb://database-2.c4lmd1bsphpd.ap-northeast-2.rds.amazonaws.com/shopping_mall
+#  url: jdbc:mariadb://database-2.c4lmd1bsphpd.ap-northeast-2.rds.amazonaws.com/shopping_mall
+
+
 
 
